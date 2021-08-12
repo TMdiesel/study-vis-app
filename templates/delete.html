@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{%block header%}
+<div class="jumbotron jumbotron-fluid bg-secondary text-white mb-3 p-2">
+    <div class="container">
+        <h1 class="display-4">削除</h1>
+    </div>
+</div>
+{%endblock header%}
+
+{%block content%}
+<div class="container">
+    <form action='' method='POST'>{% csrf_token %}
+        <input class="btn btn-primary" type="submit" value="削除">
+    </form>
+</div>
+{%endblock content%}

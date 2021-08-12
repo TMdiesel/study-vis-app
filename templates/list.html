@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load poll_extras %}
+
+{% block header %}
+<div class="jumbotron jumbotron-fluid bg-secondary text-white mb-3 p-2">
+    <div class="container">
+        <h1 class="display-4">勉強時間管理アプリ</h1>
+    </div>
+</div>
+{% endblock header%}
+
+{% block content %}
+<div class="container">
+    <p id="timer">00:00:00</p>
+    <div>
+        <button id="start_stop" class="btn  btn-primary mb-3">START</button>
+    </div>
+
+    <a href="{% url 'create' %}" class="btn btn-primary mb-2" tabindex="-1" role="button" aria-disabled="true">新規作成</a>
+
+    {% for item in object_list %}
+    <div class="row alert alert-{{item.item}}" role="alert">
+        <div class="col-sm-5">
+            <p>{{item.starttime| date:"m/d(D)"}},{{item.starttime| date:"H:i"}}~{{item.endtime|date:"H:i"}}
+                ({{item.duration|rm_second}})
+            </p>
+        </div>
+        <div class="col-sm-4 text-right">
+            <p>{{item.get_item_display}}</p>
+        </div>
+
+        <div class="col-sm-3 text-right">
+            <a href="{% url 'update' item.pk%}" class=" btn btn-link" tabindex="-1" role="button"
+                aria-disabled="true">編集</a>
+            <a href="{% url 'delete' item.pk%}" class="btn btn-link " tabindex="-1" role="button"
+                aria-disabled="true">削除</a>
+        </div>
+
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+    var addZero = function (value) {
+        if (value < 10) {
+            value = '0' + value;
+        }
+        return value;
+    }
+
+    var start;
+    var timer_id;
+
+    document.getElementById('start_stop').addEventListener('click', function () {
+        if (this.innerHTML === 'START') {
+            start = new Date();
+            timer_id = setInterval(goTimer, 10);
+
+            this.innerHTML = 'STOP';
+            this.classList.remove('btn-primary');
+            this.classList.add('btn-danger');
+        } else {
+            clearInterval(timer_id)
+            this.innerHTML = 'START';
+            this.classList.remove('btn-danger');
+            this.classList.add('btn-primary');
+        }
+    });
+
+    var goTimer = function () {
+        var now = new Date();
+        var milli = now.getTime() - start.getTime();
+        var seconds = Math.floor(milli / 1000);
+        var minutes = Math.floor(seconds / 60);
+        var hours = Math.floor(minutes / 60);
+        seconds %= 60;
+        minutes %= 60;
+        seconds = addZero(seconds);
+        minutes = addZero(minutes);
+        hours = addZero(hours);
+        document.getElementById('timer').innerHTML = hours + ':' + minutes + ':' + seconds;
+    }
+</script>
+{% endblock content%}
