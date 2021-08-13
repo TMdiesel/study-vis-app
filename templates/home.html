@@ -9,6 +9,20 @@
 
 {%block content%}
 <div class="container">
+    <h2 id="timer"></h2>
+    <script>
+        time();
+        function time() {
+            var now = new Date();
+            var date = now.getFullYear() + "/" + (now.getMonth() + 1) + "/" + now.getDate();
+            var dayOfWeek = now.getDay();
+            var dayOfWeekStr = ["日", "月", "火", "水", "木", "金", "土"][dayOfWeek];
+            var time = now.getHours() + ":" + now.getMinutes();
+            document.getElementById("timer").innerHTML = date + "(" + dayOfWeekStr + ") " + time;
+        }
+        setInterval('time()', 1000);
+    </script>
+
     <form action='' method='POST'>{% csrf_token %}
         <table>
             {{form.as_table}}

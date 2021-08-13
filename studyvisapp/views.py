@@ -39,5 +39,5 @@ class StudyUpdate(UpdateView):
 class StudyHome(CreateView):
     template_name = "home.html"
     model = TimeModel
-    success_url = reverse_lazy("list")
+    success_url = reverse_lazy("home")
     fields = ("item",)
