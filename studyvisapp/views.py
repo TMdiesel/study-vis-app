@@ -7,10 +7,12 @@ from django.views.generic import (
     CreateView,
     DeleteView,
     UpdateView,
+    TemplateView,
 )
-from django.urls import reverse_lazy, reverse
-from django.http import HttpResponseRedirect
+from django.urls import reverse_lazy
 from django.utils.timezone import make_aware
+import plotly.graph_objects as go
+import pandas as pd
 
 from .models import TimeModel
 from .forms import HomeForm
@@ -78,5 +80,52 @@ def StudyTimer(request):
     return render(request, "timer.html")
 
 
-def StudyVis(request):
-    return render(request, "vis.html")
+class StudyVis(TemplateView):
+    template_name = "vis.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(StudyVis, self).get_context_data(**kwargs)
+        context["plot1"], context["plot2"] = self._create_graph()
+        return context
+
+    def _create_graph(self):
+        df = pd.DataFrame(list(TimeModel.objects.all().values()))
+        df["duration"] = df["duration"].apply(lambda x: x.total_seconds() / 3600)
+        df["date"] = df["starttime"].apply(lambda x: x.date())
+        date_df = df.groupby("date").sum()[["duration"]]
+        date_df = self._complement_date(date_df)
+        task_num_gdf = df.groupby("item").sum()[["duration"]]
+
+        fig1 = go.Figure(
+            go.Scatter(
+                x=date_df.index,
+                y=date_df["duration"],
+            ),
+            layout=go.Layout(width=800, height=400),
+        )
+        fig2 = go.Figure(
+            go.Bar(
+                x=task_num_gdf.index,
+                y=task_num_gdf["duration"],
+            ),
+            layout=go.Layout(width=800, height=400),
+        )
+        return fig1.to_html(include_plotlyjs=False), fig2.to_html(
+            include_plotlyjs=False
+        )
+
+    def _complement_date(self, s: pd.Series) -> pd.DataFrame:
+        """
+        日付がindexのSeriesを入力して、
+        欠けている日付をmin_dateからmax_dateの範囲で埋める
+        """
+        str_min_date = s.index.min().strftime("%Y-%m-%d")
+        str_max_date = s.index.max().strftime("%Y-%m-%d")
+        dates_df = pd.DataFrame(
+            index=pd.date_range(str_min_date, str_max_date, freq="D")
+        )
+        return (
+            pd.DataFrame(s)
+            .merge(dates_df, how="outer", left_index=True, right_index=True)
+            .fillna(0)
+        )

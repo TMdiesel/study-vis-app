@@ -1,0 +1,18 @@
+{%extends 'base.html'%}
+{%block header%}
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+{%endblock header%}
+
+{%block content%}
+<div class="container">
+    <div class="graph">
+        {{plot1|safe}}<p>勉強時間の推移</p>
+    </div>
+    <div class="graph">
+        {{plot2|safe}} <p>項目ごとの勉強時間</p>
+    </div>
+    <div class="graph">
+        <p>項目ごとの勉強時間推移</p>
+    </div>
+</div>
+{%endblock content%}
