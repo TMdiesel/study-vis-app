@@ -52,6 +52,7 @@ class StudyHome(CreateView):
         now = datetime.datetime.now()
         object = form.save(commit=False)
         object.starttime = make_aware(now)
+        object.isactive = True
         object.save()
         return render(request, "list.html")
 
@@ -60,7 +61,7 @@ class StudyEnd(UpdateView):
     template_name = "end.html"
     model = TimeModel
     success_url = reverse_lazy("list")
-    fields = ("item", "memo", "starttime", "endtime", "duration")
+    fields = ("item", "memo", "starttime", "endtime", "duration", "isactive")
 
     def post(self, request, pk):
         article = TimeModel.objects.get(pk=pk)
@@ -68,5 +69,6 @@ class StudyEnd(UpdateView):
         now = datetime.datetime.now()
         object = form.save(commit=False)
         object.endtime = make_aware(now)
+        object.isactive = False
         object.save()
         return render(request, "list.html")

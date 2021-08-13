@@ -16,7 +16,7 @@
         <button id="start_stop" class="btn  btn-primary mb-3">START</button>
     </div>
 
-    <table class="table">
+    <table class="table table-bordered ">
         <tr>
             <th>日付</th>
             <th>開始</th>
@@ -26,24 +26,28 @@
             <th>終了</th>
             <th>編集</th>
             <th>削除</th>
-            <th></th>
         </tr>
-        {% for item in object_list reversed %}
-        <tr class="table-{{item.item}}">
-            <td>{{item.starttime| date:"m/d(D)"}}</td>
-            <td>{{item.starttime| date:"H:i"}}</td>
-            <td>{{item.endtime|date:"H:i"}}</td>
-            <td> {{item.duration|rm_second}}</td>
-            </td>
-            <td>{{item.get_item_display}}</td>
-            <td><a href="{% url 'end' item.pk%}" class=" btn btn-link" tabindex="-1" role="button"
-                    aria-disabled="true">終了</a></td>
-            <td><a href="{% url 'update' item.pk%}" class=" btn btn-link" tabindex="-1" role="button"
-                    aria-disabled="true">編集</a></td>
-            <td><a href="{% url 'delete' item.pk%}" class="btn btn-link " tabindex="-1" role="button"
-                    aria-disabled="true">削除</a></td>
-        </tr>
-        {% endfor %}
+        <tbody>
+            {% for item in object_list reversed %}
+            <tr class=" table-{{item.item}}">
+                <td>{{item.starttime| date:"m/d(D)"}}</td>
+                <td>{{item.starttime| date:"H:i"}}</td>
+                <td>{{item.endtime|date:"H:i"}}</td>
+                <td> {{item.duration|rm_second}}</td>
+                <td>{{item.get_item_display}}</td>
+                {% if item.isactive == True %}
+                <td><a href="{% url 'end' item.pk%}" class=" btn btn-link" tabindex="-1" role="button"
+                        aria-disabled="true">終了</a></td>
+                {% else %}
+                <td></td>
+                {%endif%}
+                <td><a href="{% url 'update' item.pk%}" class=" btn btn-link" tabindex="-1" role="button"
+                        aria-disabled="true">編集</a></td>
+                <td><a href="{% url 'delete' item.pk%}" class="btn btn-link " tabindex="-1" role="button"
+                        aria-disabled="true">削除</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
     <a href="{% url 'create' %}" class="btn btn-primary mb-2" tabindex="-1" role="button" aria-disabled="true">追加</a>
 

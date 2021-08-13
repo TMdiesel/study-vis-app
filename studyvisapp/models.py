@@ -12,6 +12,7 @@ class TimeModel(models.Model):
     starttime = models.DateTimeField(null=True, blank=True, default=None)
     endtime = models.DateTimeField(null=True, blank=True, default=None)
     duration = models.DurationField(null=True, blank=True)
+    isactive = models.BooleanField(null=True, blank=True, default=False)
 
     def __str__(self):
         return f"{self.get_item_display()}"

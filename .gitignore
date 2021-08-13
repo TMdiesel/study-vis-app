@@ -139,6 +139,7 @@ cython_debug/
 
 # ref
 ref/
+notebooks/
 
 # vscode
 .vscode/
