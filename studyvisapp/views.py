@@ -60,7 +60,7 @@ class StudyEnd(UpdateView):
     template_name = "end.html"
     model = TimeModel
     success_url = reverse_lazy("list")
-    fields = ("memo", "endtime")
+    fields = ("item", "memo", "starttime", "endtime", "duration")
 
     def post(self, request, pk):
         article = TimeModel.objects.get(pk=pk)
