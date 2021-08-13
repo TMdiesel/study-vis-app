@@ -16,7 +16,7 @@
         <button id="start_stop" class="btn  btn-primary mb-3">START</button>
     </div>
 
-    <a href="{% url 'create' %}" class="btn btn-primary mb-2" tabindex="-1" role="button" aria-disabled="true">新規作成</a>
+    <a href="{% url 'create' %}" class="btn btn-primary mb-2" tabindex="-1" role="button" aria-disabled="true">追加</a>
 
     {% for item in object_list %}
     <div class="row alert alert-{{item.item}}" role="alert">
@@ -25,11 +25,13 @@
                 ({{item.duration|rm_second}})
             </p>
         </div>
-        <div class="col-sm-4 text-right">
+        <div class="col-sm-3 text-right">
             <p>{{item.get_item_display}}</p>
         </div>
 
-        <div class="col-sm-3 text-right">
+        <div class="col-sm-4 text-right">
+            <a href="{% url 'end' item.pk%}" class=" btn btn-link" tabindex="-1" role="button"
+                aria-disabled="true">終了</a>
             <a href="{% url 'update' item.pk%}" class=" btn btn-link" tabindex="-1" role="button"
                 aria-disabled="true">編集</a>
             <a href="{% url 'delete' item.pk%}" class="btn btn-link " tabindex="-1" role="button"

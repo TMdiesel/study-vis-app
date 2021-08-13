@@ -6,6 +6,7 @@ from .views import (
     StudyDelete,
     StudyUpdate,
     StudyHome,
+    StudyEnd,
 )
 
 urlpatterns = [
@@ -14,4 +15,5 @@ urlpatterns = [
     path("delete/<int:pk>", StudyDelete.as_view(), name="delete"),
     path("update/<int:pk>", StudyUpdate.as_view(), name="update"),
     path("home/", StudyHome.as_view(), name="home"),
+    path("end/<int:pk>", StudyEnd.as_view(), name="end"),
 ]

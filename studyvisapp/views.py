@@ -8,10 +8,11 @@ from django.views.generic import (
     DeleteView,
     UpdateView,
 )
-from .models import TimeModel
 from django.urls import reverse_lazy, reverse
 from django.http import HttpResponseRedirect
+from django.utils.timezone import make_aware
 
+from .models import TimeModel
 from .forms import HomeForm
 
 # Create your views here.
@@ -24,7 +25,7 @@ class StudyCreate(CreateView):
     template_name = "create.html"
     model = TimeModel
     success_url = reverse_lazy("list")
-    fields = ("item", "memo", "starttime", "endtime", "duration")
+    fields = ("item", "memo", "starttime", "endtime")
 
 
 class StudyDelete(DeleteView):
@@ -50,6 +51,22 @@ class StudyHome(CreateView):
         form = HomeForm(request.POST)
         now = datetime.datetime.now()
         object = form.save(commit=False)
-        object.starttime = now.strftime("%Y-%m-%d %H:%M:%S")
+        object.starttime = make_aware(now)
+        object.save()
+        return render(request, "list.html")
+
+
+class StudyEnd(UpdateView):
+    template_name = "end.html"
+    model = TimeModel
+    success_url = reverse_lazy("list")
+    fields = ("memo", "endtime")
+
+    def post(self, request, pk):
+        article = TimeModel.objects.get(pk=pk)
+        form = HomeForm(request.POST, instance=article)
+        now = datetime.datetime.now()
+        object = form.save(commit=False)
+        object.endtime = make_aware(now)
         object.save()
         return render(request, "list.html")
