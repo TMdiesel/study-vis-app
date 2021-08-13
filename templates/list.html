@@ -28,10 +28,10 @@
                 <td> {{item.duration|rm_second}}</td>
                 <td>{{item.get_item_display}}</td>
                 {% if item.isactive == True %}
-                <td><a href="{% url 'end' item.pk%}" class=" btn btn-link" tabindex="-1" role="button"
+                <td><a href="{% url 'end' item.pk%}" class=" btn btn-danger" tabindex="-1" role="button"
                         aria-disabled="true">終了</a></td>
                 {% else %}
-                <td></td>
+                <td>-</td>
                 {%endif%}
                 <td><a href="{% url 'update' item.pk%}" class=" btn btn-link" tabindex="-1" role="button"
                         aria-disabled="true">編集</a></td>
@@ -41,7 +41,7 @@
             {% endfor %}
         </tbody>
     </table>
-    <a href="{% url 'create' %}" class="btn btn-primary mb-2" tabindex="-1" role="button" aria-disabled="true">追加</a>
+    <a href="{% url 'create' %}" class="btn btn-primary mb-2" tabindex="-1" role="button" aria-disabled="true">手動で追加</a>
 
 </div>
 

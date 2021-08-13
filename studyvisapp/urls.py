@@ -8,6 +8,7 @@ from .views import (
     StudyHome,
     StudyEnd,
     StudyTimer,
+    StudyVis,
 )
 
 urlpatterns = [
@@ -18,4 +19,5 @@ urlpatterns = [
     path("home/", StudyHome.as_view(), name="home"),
     path("end/<int:pk>", StudyEnd.as_view(), name="end"),
     path("timer/", StudyTimer, name="timer"),
+    path("vis/", StudyVis, name="vis"),
 ]

@@ -1,6 +1,6 @@
 import datetime
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import (
     ListView,
@@ -54,7 +54,7 @@ class StudyHome(CreateView):
         object.starttime = make_aware(now)
         object.isactive = True
         object.save()
-        return render(request, "list.html")
+        return redirect("list")
 
 
 class StudyEnd(UpdateView):
@@ -71,8 +71,12 @@ class StudyEnd(UpdateView):
         object.endtime = make_aware(now)
         object.isactive = False
         object.save()
-        return render(request, "list.html")
+        return redirect("list")
 
 
 def StudyTimer(request):
     return render(request, "timer.html")
+
+
+def StudyVis(request):
+    return render(request, "vis.html")

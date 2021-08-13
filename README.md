@@ -1,4 +1,4 @@
-# 勉強時間可視化アプリ
+# 勉強時間管理アプリ
 
 勉強時間の管理・可視化を行う Django アプリです。
 
@@ -22,5 +22,3 @@
    ```sh
    poetry run python manage.py runserver
    ```
-
-## 参考
