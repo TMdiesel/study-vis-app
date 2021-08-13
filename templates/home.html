@@ -1,4 +1,6 @@
 {%extends 'base.html'%}
+{% load poll_extras %}
+
 {%block header%}
 <div class="jumbotron jumbotron-fluid bg-secondary text-white mb-3 p-2">
     <div class="container">
@@ -11,13 +13,20 @@
 <div class="container">
     <h2 id="timer"></h2>
     <script>
+        var addZero = function (value) {
+            if (value < 10) {
+                value = '0' + value;
+            }
+            return value;
+        }
+
         time();
         function time() {
             var now = new Date();
             var date = now.getFullYear() + "/" + (now.getMonth() + 1) + "/" + now.getDate();
             var dayOfWeek = now.getDay();
             var dayOfWeekStr = ["日", "月", "火", "水", "木", "金", "土"][dayOfWeek];
-            var time = now.getHours() + ":" + now.getMinutes();
+            var time = now.getHours() + ":" + addZero(now.getMinutes());
             document.getElementById("timer").innerHTML = date + "(" + dayOfWeekStr + ") " + time;
         }
         setInterval('time()', 1000);
@@ -25,9 +34,12 @@
 
     <form action='' method='POST'>{% csrf_token %}
         <table>
-            {{form.as_table}}
+            <p>項目:
+                {{form.item}}
+            </p>
         </table>
-        <input class="btn btn-primary" type="submit" value="開始">
+        <input class="btn btn-primary mt-3" type="submit" value="開始">
     </form>
+
 </div>
 {%endblock content%}

@@ -1,6 +1,7 @@
-from django.shortcuts import render
+import datetime
 
-# Create your views here.
+from django.shortcuts import render
+from django.views import View
 from django.views.generic import (
     ListView,
     CreateView,
@@ -8,7 +9,10 @@ from django.views.generic import (
     UpdateView,
 )
 from .models import TimeModel
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
+from django.http import HttpResponseRedirect
+
+from .forms import HomeForm
 
 # Create your views here.
 class StudyList(ListView):
@@ -39,5 +43,13 @@ class StudyUpdate(UpdateView):
 class StudyHome(CreateView):
     template_name = "home.html"
     model = TimeModel
-    success_url = reverse_lazy("home")
+    success_url = reverse_lazy("list")
     fields = ("item",)
+
+    def post(self, request):
+        form = HomeForm(request.POST)
+        now = datetime.datetime.now()
+        object = form.save(commit=False)
+        object.starttime = now.strftime("%Y-%m-%d %H:%M:%S")
+        object.save()
+        return render(request, "list.html")
