@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load poll_extras %}
+
+{% block header %}
+{% endblock header%}
+
+{% block content %}
+<div class="container">
+    <p id="timer">00:00:00</p>
+    <div>
+        <button id="start_stop" class="btn  btn-primary mb-3">START</button>
+    </div>
+</div>
+
+<script>
+    var addZero = function (value) {
+        if (value < 10) {
+            value = '0' + value;
+        }
+        return value;
+    }
+
+    var start;
+    var timer_id;
+
+    document.getElementById('start_stop').addEventListener('click', function () {
+        if (this.innerHTML === 'START') {
+            start = new Date();
+            timer_id = setInterval(goTimer, 10);
+
+            this.innerHTML = 'STOP';
+            this.classList.remove('btn-primary');
+            this.classList.add('btn-danger');
+        } else {
+            clearInterval(timer_id)
+            this.innerHTML = 'START';
+            this.classList.remove('btn-danger');
+            this.classList.add('btn-primary');
+        }
+    });
+
+    var goTimer = function () {
+        var now = new Date();
+        var milli = now.getTime() - start.getTime();
+        var seconds = Math.floor(milli / 1000);
+        var minutes = Math.floor(seconds / 60);
+        var hours = Math.floor(minutes / 60);
+        seconds %= 60;
+        minutes %= 60;
+        seconds = addZero(seconds);
+        minutes = addZero(minutes);
+        hours = addZero(hours);
+        document.getElementById('timer').innerHTML = hours + ':' + minutes + ':' + seconds;
+    }
+</script>
+{% endblock content%}

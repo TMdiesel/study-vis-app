@@ -72,3 +72,7 @@ class StudyEnd(UpdateView):
         object.isactive = False
         object.save()
         return render(request, "list.html")
+
+
+def StudyTimer(request):
+    return render(request, "timer.html")
