@@ -5,6 +5,12 @@
 
 {%block content%}
 <div class="container">
+    <form action="" method="get">
+        <input name="year" value="{{ request.GET.year }}" type="text">
+        <input name="month" value="{{ request.GET.month }}" type="text">
+        <button type="submit">表示</button>
+    </form>
+
     <div class="graph">
         {{plot1|safe}}
     </div>

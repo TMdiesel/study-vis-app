@@ -6,7 +6,11 @@
 
 {% block content %}
 <div class="container">
-
+    <form action="" method="get" class="mb-5">
+        <input name="year" value="{{ request.GET.year }}" type="text">
+        <input name="month" value="{{ request.GET.month }}" type="text">
+        <button type="submit">表示</button>
+    </form>
 
     <table class="table table-bordered ">
         <tr>
@@ -20,7 +24,7 @@
             <th>削除</th>
         </tr>
         <tbody>
-            {% for item in object_list reversed %}
+            {% for item in object_list %}
             <tr class=" table-{{item.item}}">
                 <td>{{item.starttime| date:"m/d(D)"}}</td>
                 <td>{{item.starttime| date:"H:i"}}</td>

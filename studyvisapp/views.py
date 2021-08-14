@@ -21,6 +21,25 @@ from .forms import HomeForm
 class StudyList(ListView):
     template_name = "list.html"
     model = TimeModel
+    paginate_by = 100
+    queryset = model.objects.order_by("-starttime")
+
+    def get_queryset(self):
+        year = (
+            datetime.date.today().year
+            if self.request.GET.get("year") is None
+            else self.request.GET.get("year")
+        )
+        month = (
+            datetime.date.today().month
+            if self.request.GET.get("month") is None
+            else self.request.GET.get("month")
+        )
+
+        object_list = self.model.objects.filter(
+            starttime__year=year, starttime__month=month
+        ).order_by("-starttime")
+        return object_list
 
 
 class StudyCreate(CreateView):
@@ -89,7 +108,24 @@ class StudyVis(TemplateView):
         return context
 
     def _create_graph(self):
-        df = pd.DataFrame(list(TimeModel.objects.all().values()))
+        year = (
+            datetime.date.today().year
+            if self.request.GET.get("year") is None
+            else self.request.GET.get("year")
+        )
+        month = (
+            datetime.date.today().month
+            if self.request.GET.get("month") is None
+            else self.request.GET.get("month")
+        )
+
+        df = pd.DataFrame(
+            list(
+                TimeModel.objects.filter(
+                    starttime__year=year, starttime__month=month
+                ).values()
+            )
+        )
         df["duration"] = df["duration"].apply(lambda x: x.total_seconds() / 3600)
         df["date"] = df["starttime"].apply(lambda x: x.date())
         date_df = df.groupby("date").sum()[["duration"]]
@@ -99,16 +135,16 @@ class StudyVis(TemplateView):
         fig1 = go.Figure(
             go.Scatter(
                 x=date_df.index,
-                y=date_df["duration"],
+                y=date_df["duration"].round(decimals=1),
             ),
-            layout=go.Layout(width=800, height=400),
+            layout=go.Layout(title="勉強時間の推移", width=800, height=400),
         )
         fig2 = go.Figure(
             go.Bar(
                 x=task_num_gdf.index,
-                y=task_num_gdf["duration"],
+                y=task_num_gdf["duration"].round(decimals=1),
             ),
-            layout=go.Layout(width=800, height=400),
+            layout=go.Layout(title="項目ごとの勉強時間", width=800, height=400),
         )
         return fig1.to_html(include_plotlyjs=False), fig2.to_html(
             include_plotlyjs=False
