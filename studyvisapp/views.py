@@ -27,16 +27,12 @@ class StudyList(ListView):
     queryset = model.objects.order_by("-starttime")
 
     def get_queryset(self):
-        year = (
-            datetime.date.today().year
-            if self.request.GET.get("year") is None
-            else self.request.GET.get("year")
-        )
-        month = (
-            datetime.date.today().month
-            if self.request.GET.get("month") is None
-            else self.request.GET.get("month")
-        )
+        if self.request.GET.get("yearmonth") is None:
+            year = datetime.date.today().year
+            month = datetime.date.today().month
+        else:
+            year = self.request.GET.get("yearmonth").split("-")[0]
+            month = self.request.GET.get("yearmonth").split("-")[1]
 
         object_list = self.model.objects.filter(
             starttime__year=year, starttime__month=month
@@ -111,16 +107,12 @@ class StudyVis(TemplateView):
 
     def _create_graph(self):
         # specify the date range
-        year = (
-            datetime.date.today().year
-            if self.request.GET.get("year") is None
-            else self.request.GET.get("year")
-        )
-        month = (
-            datetime.date.today().month
-            if self.request.GET.get("month") is None
-            else self.request.GET.get("month")
-        )
+        if self.request.GET.get("yearmonth") is None:
+            year = datetime.date.today().year
+            month = datetime.date.today().month
+        else:
+            year = self.request.GET.get("yearmonth").split("-")[0]
+            month = self.request.GET.get("yearmonth").split("-")[1]
 
         # read&create data
         df = pd.DataFrame(
