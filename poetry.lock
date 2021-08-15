@@ -408,6 +408,14 @@ MarkupSafe = ">=2.0"
 i18n = ["Babel (>=2.7)"]
 
 [[package]]
+name = "jpholiday"
+version = "0.1.5"
+description = "Pure-Python Japan Public Holiday Generate"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "json5"
 version = "0.9.6"
 description = "A Python implementation of the JSON5 data format."
@@ -1322,7 +1330,7 @@ notebook = ">=4.4.1"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "a0d795932c8f6b0557cc545cd1aa11aa6828b389e2169d709c126e8efa577c9a"
+content-hash = "a7d16107055ff889e2c68188e91915a2eca7e753e11d13a0d523da4b46dd12d3"
 
 [metadata.files]
 anyio = [
@@ -1573,6 +1581,10 @@ jedi = [
 jinja2 = [
     {file = "Jinja2-3.0.1-py3-none-any.whl", hash = "sha256:1f06f2da51e7b56b8f238affdd6b4e2c61e39598a378cc49345bc1bd42a978a4"},
     {file = "Jinja2-3.0.1.tar.gz", hash = "sha256:703f484b47a6af502e743c9122595cc812b0271f661722403114f71a79d0f5a4"},
+]
+jpholiday = [
+    {file = "jpholiday-0.1.5-py3-none-any.whl", hash = "sha256:59704b8a556715e10631f07da245f9badf686843309dd6cc614ab5bf565437ad"},
+    {file = "jpholiday-0.1.5.tar.gz", hash = "sha256:34fe7bc16b1c84aa4368157a2d4b9fbf859c238f18365c122303622bcf100d7b"},
 ]
 json5 = [
     {file = "json5-0.9.6-py2.py3-none-any.whl", hash = "sha256:823e510eb355949bed817e1f3e2d682455dc6af9daf6066d5698d6a2ca4481c2"},
