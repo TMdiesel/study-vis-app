@@ -23,6 +23,8 @@
    ```sh
    poetry run python manage.py makemigrations
    poetry run python manage.py migrate
+   poetry run python manage.py makemigrations studyvisapp
+   poetry run python manage.py migrate studyvisapp
    ```
 
 1. サーバーを起動して、ブラウザから http://127.0.0.1:8000/ にアクセスします。
