@@ -1,9 +1,11 @@
 from django.db import models
 
+from .utils import create_item_choice
+
 # Create your models here.
 
 
-CHOICE = (("danger", "機械学習"), ("warning", "統計"), ("primary", "読書"))
+CHOICE = create_item_choice()
 
 
 class TimeModel(models.Model):
