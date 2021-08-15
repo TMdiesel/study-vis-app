@@ -10,6 +10,8 @@
    poetry install
    ```
 
+1. `sample.config.yaml`をコピーして、`config.yaml`にリネームします。作成した`config.yaml`において、勉強項目と表示色を登録します。色の名前は[Bootstrap ドキュメント](https://getbootstrap.jp/docs/4.4/utilities/colors/)をご参照ください。
+
 1. モデルをデータベースに反映させます。
 
    ```sh
@@ -22,3 +24,7 @@
    ```sh
    poetry run python manage.py runserver
    ```
+
+## 画面
+
+https://user-images.githubusercontent.com/50258785/129472563-366180f6-739d-4906-b004-14cdc12025e0.mp4
