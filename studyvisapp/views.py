@@ -1,4 +1,5 @@
 import datetime
+from datetime import timedelta
 
 from django.shortcuts import render, redirect
 from django.views import View
@@ -13,6 +14,7 @@ from django.urls import reverse_lazy
 from django.utils.timezone import make_aware
 import plotly.graph_objects as go
 import pandas as pd
+import jpholiday
 
 from .models import TimeModel
 from .forms import HomeForm
@@ -108,6 +110,7 @@ class StudyVis(TemplateView):
         return context
 
     def _create_graph(self):
+        # specify the date range
         year = (
             datetime.date.today().year
             if self.request.GET.get("year") is None
@@ -119,6 +122,7 @@ class StudyVis(TemplateView):
             else self.request.GET.get("month")
         )
 
+        # read&create data
         df = pd.DataFrame(
             list(
                 TimeModel.objects.filter(
@@ -131,21 +135,59 @@ class StudyVis(TemplateView):
         date_df = df.groupby("date").sum()[["duration"]]
         date_df = self._complement_date(date_df)
         task_num_gdf = df.groupby("item").sum()[["duration"]]
+        _, holiday_index = self._create_biz_hol_index(
+            date_df.index.min(), date_df.index.max()
+        )
 
+        # create graph
         fig1 = go.Figure(
             go.Scatter(
                 x=date_df.index,
                 y=date_df["duration"].round(decimals=1),
+                mode="lines+markers",
+                marker=dict(
+                    size=7,
+                ),
+                name="all",
             ),
-            layout=go.Layout(title="勉強時間の推移", width=800, height=400),
+            layout=go.Layout(
+                title=f"勉強時間の推移({year}/{month})",
+                width=800,
+                height=400,
+                xaxis=dict(
+                    range=[
+                        date_df.index.min() - timedelta(days=1),
+                        date_df.index.max() + timedelta(days=1),
+                    ],
+                    dtick="D",
+                    tickformat="%d",
+                ),
+            ),
         )
+        fig1.add_trace(
+            go.Scatter(
+                x=date_df.index[holiday_index],
+                y=date_df["duration"][holiday_index],
+                mode="markers",
+                marker=dict(
+                    size=7,
+                ),
+                name="休日",
+            ),
+        )
+
         fig2 = go.Figure(
             go.Bar(
                 x=task_num_gdf.index,
                 y=task_num_gdf["duration"].round(decimals=1),
             ),
-            layout=go.Layout(title="項目ごとの勉強時間", width=800, height=400),
+            layout=go.Layout(
+                title=f"項目ごとの勉強時間({year}/{month})",
+                width=800,
+                height=400,
+            ),
         )
+
         return fig1.to_html(include_plotlyjs=False), fig2.to_html(
             include_plotlyjs=False
         )
@@ -165,3 +207,39 @@ class StudyVis(TemplateView):
             .merge(dates_df, how="outer", left_index=True, right_index=True)
             .fillna(0)
         )
+
+    def _create_biz_hol_index(
+        self, start_date: datetime.date, end_date: datetime.date
+    ) -> pd.date_range:
+        """
+        平日と休日のindexを返す
+        """
+
+        year = start_date.year
+        holiday = []
+        holiday_dict = jpholiday.year_holidays(year)
+        for i in range(len(holiday_dict)):
+            holiday.append(holiday_dict[i][0])
+        holiday = holiday + [
+            datetime.date(year, 1, 1),
+            datetime.date(year, 1, 2),
+            datetime.date(year, 1, 3),
+            datetime.date(year, 12, 31),
+        ]  # 年末年始追加
+        holiday = sorted(list(set(holiday)))  # for uniqueness
+        holiday = pd.to_datetime(holiday)
+
+        calendar_full = pd.date_range(start_date, end_date, freq="D")
+        business_index = []
+        holiday_index = []
+        for idx, calendar in enumerate(calendar_full):
+            if (
+                (not calendar in holiday)
+                and (calendar.weekday() >= 0)
+                and (calendar.weekday() <= 4)
+            ):
+                business_index.append(idx)
+            else:
+                holiday_index.append(idx)
+
+        return business_index, holiday_index
