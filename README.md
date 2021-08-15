@@ -25,7 +25,7 @@
    poetry run python manage.py migrate
    ```
 
-1. サーバーを起動します。
+1. サーバーを起動して、ブラウザから http://127.0.0.1:8000/ にアクセスします。
 
    ```sh
    poetry run python manage.py runserver
