@@ -10,6 +10,12 @@
    poetry install
    ```
 
+1. secret key を生成します。
+
+   ```sh
+   poetry run python studyvisapp/utils.py >| studyvis/local_settings.py
+   ```
+
 1. `sample.config.yaml`をコピーして、`config.yaml`にリネームします。作成した`config.yaml`において、勉強項目と表示色を登録します。色の名前は[Bootstrap ドキュメント](https://getbootstrap.jp/docs/4.4/utilities/colors/)をご参照ください。
 
 1. モデルをデータベースに反映させます。
