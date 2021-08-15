@@ -15,6 +15,7 @@ from django.utils.timezone import make_aware
 import plotly.graph_objects as go
 import pandas as pd
 import jpholiday
+from django_pandas.io import read_frame
 
 from .models import TimeModel
 from .forms import HomeForm
@@ -115,13 +116,15 @@ class StudyVis(TemplateView):
             month = self.request.GET.get("yearmonth").split("-")[1]
 
         # read&create data
-        df = pd.DataFrame(
-            list(
-                TimeModel.objects.filter(
-                    starttime__year=year, starttime__month=month
-                ).values()
-            )
-        )
+        # df = pd.DataFrame(
+        #    list(
+        #        TimeModel.objects.filter(
+        #            starttime__year=year, starttime__month=month
+        #        ).values()
+        #    )
+        # )
+        qs = TimeModel.objects.filter(starttime__year=year, starttime__month=month)
+        df = read_frame(qs, verbose=True)
         df["duration"] = df["duration"].apply(lambda x: x.total_seconds() / 3600)
         df["date"] = df["starttime"].apply(lambda x: x.date())
         date_df = df.groupby("date").sum()[["duration"]]

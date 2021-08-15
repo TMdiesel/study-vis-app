@@ -253,6 +253,18 @@ argon2 = ["argon2-cffi (>=19.1.0)"]
 bcrypt = ["bcrypt"]
 
 [[package]]
+name = "django-pandas"
+version = "0.6.4"
+description = "Tools for working with pydata.pandas in your Django projects"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+pandas = ">=0.14.1"
+six = ">=1.15.0"
+
+[[package]]
 name = "entrypoints"
 version = "0.3"
 description = "Discover and load entry points from installed packages."
@@ -1369,7 +1381,7 @@ notebook = ">=4.4.1"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "c335ee09e3f1cffc44e75a9ca5b3acf0081aead3965ca5ab557b85103afcf2a6"
+content-hash = "7ee69e1a1989ce2500b74f910da6e6faf01d3b330579312989210b21c9bda21b"
 
 [metadata.files]
 antlr4-python3-runtime = [
@@ -1579,6 +1591,10 @@ defusedxml = [
 django = [
     {file = "Django-3.2.6-py3-none-any.whl", hash = "sha256:7f92413529aa0e291f3be78ab19be31aefb1e1c9a52cd59e130f505f27a51f13"},
     {file = "Django-3.2.6.tar.gz", hash = "sha256:f27f8544c9d4c383bbe007c57e3235918e258364577373d4920e9162837be022"},
+]
+django-pandas = [
+    {file = "django-pandas-0.6.4.tar.gz", hash = "sha256:a1b5d300112a09625926a5756aa72bbe8918fb95b9c4ec39b3a06f03e0e336f9"},
+    {file = "django_pandas-0.6.4-py3-none-any.whl", hash = "sha256:ccb3c5b9e201515c5247266227b22d7307a1e3f8b1c02c3844a985f367b8f199"},
 ]
 entrypoints = [
     {file = "entrypoints-0.3-py2.py3-none-any.whl", hash = "sha256:589f874b313739ad35be6e0cd7efde2a4e9b6fea91edcc34e58ecbb8dbe56d19"},

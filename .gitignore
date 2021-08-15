@@ -146,3 +146,6 @@ notebooks/
 
 # migrations
 migrations/
+
+# config
+config.yaml
