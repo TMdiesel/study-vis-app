@@ -1,6 +1,8 @@
 from datetime import timedelta
 from django import template
 
+from .. import utils
+
 register = template.Library()
 
 
@@ -17,3 +19,9 @@ def rm_second(td: timedelta):
         return f"{hours}:{minutes}"
     except AttributeError:
         return td
+
+
+@register.filter(name="lookup")
+def lookup(key):
+    dict = utils.load_config().item
+    return dict[key]

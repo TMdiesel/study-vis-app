@@ -116,13 +116,6 @@ class StudyVis(TemplateView):
             month = self.request.GET.get("yearmonth").split("-")[1]
 
         # read&create data
-        # df = pd.DataFrame(
-        #    list(
-        #        TimeModel.objects.filter(
-        #            starttime__year=year, starttime__month=month
-        #        ).values()
-        #    )
-        # )
         qs = TimeModel.objects.filter(starttime__year=year, starttime__month=month)
         df = read_frame(qs, verbose=True)
         df["duration"] = df["duration"].apply(lambda x: x.total_seconds() / 3600)
@@ -162,7 +155,7 @@ class StudyVis(TemplateView):
         fig1.add_trace(
             go.Scatter(
                 x=date_df.index[holiday_index],
-                y=date_df["duration"][holiday_index],
+                y=date_df["duration"][holiday_index].round(decimals=1),
                 mode="markers",
                 marker=dict(
                     size=7,
